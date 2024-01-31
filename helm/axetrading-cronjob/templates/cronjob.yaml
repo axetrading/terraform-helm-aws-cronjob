@@ -1,0 +1,37 @@
+{{- if and .Values.cronJob.create }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "axetrading-api.fullname" . }}
+  labels:
+    {{- include "axetrading-api.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.cronJob.cronJobSchedule }}
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ include "axetrading-api.fullname" . }}-cronjob
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              command:
+              {{- range $_, $cmd := .Values.cronJob.Commands }}
+                - {{ $cmd }}
+              {{- end }}
+              volumeMounts:
+               {{- if .Values.persistence.enabled }}
+                - name: {{ include "axetrading-api.fullname" . }}-data
+                  mountPath: {{ .Values.persistence.mountPath }}
+               {{- end }}
+          restartPolicy: Never
+          serviceAccountName: {{ include "axetrading-api.serviceAccountName" . }}-cron
+          volumes:
+          {{- if .Values.persistence.enabled }}
+          - name: {{ include "axetrading-api.fullname" . }}-data
+            persistentVolumeClaim:
+              claimName: {{ include "axetrading-api.fullname" . }}-pvc
+          {{- end }}
+{{- end }}

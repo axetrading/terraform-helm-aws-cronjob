@@ -1,0 +1,19 @@
+{{- if .Values.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "axetrading-api.fullname" . }}-pvc
+  labels:
+      {{- include "axetrading-api.labels" . | nindent 4 }}
+  {{- if .Values.persistence.annotations }}
+  annotations:
+      {{ toYaml .Values.persistence.annotations | indent 10 }}
+  {{- end }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode }}
+  storageClassName: {{ .Values.persistence.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.storageSize }}
+{{- end }}
