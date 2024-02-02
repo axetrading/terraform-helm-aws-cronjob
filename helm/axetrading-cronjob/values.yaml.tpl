@@ -107,9 +107,6 @@ efsProvisioner:
   efsFileSystemId: ""
   reclaimPolicy: retain
 
-container_commands:
-  args: []
-
 cronJob:
   create: %{ if length(cronJobCommands) > 0 && cronJobSchedule != "" }true%{~ else }false%{~ endif }
   cronJobSchedule: ${cronJobSchedule}

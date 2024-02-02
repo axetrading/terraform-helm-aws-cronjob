@@ -285,13 +285,6 @@ variable "efs_filesystem_id" {
   default     = ""
 }
 
-variable "container_commands_args" {
-  type        = list(any)
-  description = "A list of args for container image at startup"
-  default     = []
-}
-
-
 variable "create_storage_class" {
   type        = bool
   description = "Whether to create storage class"

@@ -60,11 +60,6 @@ resource "helm_release" "main" {
   }
 
   set {
-    name  = "container_commands.args"
-    value = "{${join(",", var.container_commands_args)}}"
-  }
-
-  set {
     name  = "persistence.storageSize"
     value = var.persistence_storageSize
     type  = "string"
