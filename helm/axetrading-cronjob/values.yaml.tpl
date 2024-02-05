@@ -45,6 +45,7 @@ persistence:
   storageClass: efs
   storageClassName: ""
   mountPath: ""
+  annotations: {}
 
 efsProvisioner:
   efsFileSystemId: ""

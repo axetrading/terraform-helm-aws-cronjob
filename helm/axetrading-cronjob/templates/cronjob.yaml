@@ -2,9 +2,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "axetrading-api.fullname" . }}
+  name: {{ include "axetrading-cronjob.fullname" . }}
   labels:
-    {{- include "axetrading-api.labels" . | nindent 4 }}
+    {{- include "axetrading-cronjob.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.cronJob.cronJobSchedule }}
   successfulJobsHistoryLimit: 2
@@ -15,33 +15,33 @@ spec:
       template:
         spec:
           containers:
-            - name: {{ include "axetrading-api.fullname" . }}-cronjob
+            - name: {{ include "axetrading-cronjob.fullname" . }}-cronjob
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
               args : {{ .Values.cronJob.cronJobCommands }}
               volumeMounts:
                {{- if .Values.persistence.enabled }}
-                - name: {{ include "axetrading-api.fullname" . }}-data
+                - name: {{ include "axetrading-cronjob.fullname" . }}-data
                   mountPath: {{ .Values.persistence.mountPath }}
                {{- end }}
                {{- if .Values.secretsStore.enabled }}
-                - name: {{ include "axetrading-api.fullname" . }}-secrets-store
+                - name: {{ include "axetrading-cronjob.fullname" . }}-secrets-store
                   mountPath: /mnt/secrets/
                   readOnly: true
                {{- end }}
           restartPolicy: Never
-          serviceAccountName: {{ include "axetrading-api.serviceAccountName" . }}-cron
+          serviceAccountName: {{ include "axetrading-cronjob.serviceAccountName" . }}-cron
           volumes:
           {{- if .Values.persistence.enabled }}
-          - name: {{ include "axetrading-api.fullname" . }}-data
+          - name: {{ include "axetrading-cronjob.fullname" . }}-data
             persistentVolumeClaim:
-              claimName: {{ include "axetrading-api.fullname" . }}-pvc
+              claimName: {{ include "axetrading-cronjob.fullname" . }}-pvc
           {{- end }}
           {{- if .Values.secretsStore.enabled }}
-          - name: {{ include "axetrading-api.fullname" . }}-secrets-store
+          - name: {{ include "axetrading-cronjob.fullname" . }}-secrets-store
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: {{ include "axetrading-api.fullname" . }}-secrets
+              secretProviderClass: {{ include "axetrading-cronjob.fullname" . }}-secrets
           {{- end }}
 {{- end }}

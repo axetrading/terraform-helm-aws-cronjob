@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "axetrading-api.fullname" . }}-pvc
+  name: {{ include "axetrading-cronjob.fullname" . }}-pvc
   labels:
-      {{- include "axetrading-api.labels" . | nindent 4 }}
+      {{- include "axetrading-cronjob.labels" . | nindent 4 }}
   {{- if .Values.persistence.annotations }}
   annotations:
       {{ toYaml .Values.persistence.annotations | indent 10 }}
