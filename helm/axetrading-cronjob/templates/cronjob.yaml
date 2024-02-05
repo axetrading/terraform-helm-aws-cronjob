@@ -17,14 +17,16 @@ spec:
           containers:
             - name: {{ include "axetrading-api.fullname" . }}-cronjob
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-              command:
-              {{- range $_, $cmd := .Values.cronJob.Commands }}
-                - {{ $cmd }}
-              {{- end }}
+              args : {{ .Values.cronJob.cronJobCommands }}
               volumeMounts:
                {{- if .Values.persistence.enabled }}
                 - name: {{ include "axetrading-api.fullname" . }}-data
                   mountPath: {{ .Values.persistence.mountPath }}
+               {{- end }}
+               {{- if .Values.secretsStore.enabled }}
+                - name: {{ include "axetrading-api.fullname" . }}-secrets-store
+                  mountPath: /mnt/secrets/
+                  readOnly: true
                {{- end }}
           restartPolicy: Never
           serviceAccountName: {{ include "axetrading-api.serviceAccountName" . }}-cron
@@ -33,5 +35,13 @@ spec:
           - name: {{ include "axetrading-api.fullname" . }}-data
             persistentVolumeClaim:
               claimName: {{ include "axetrading-api.fullname" . }}-pvc
+          {{- end }}
+          {{- if .Values.secretsStore.enabled }}
+          - name: {{ include "axetrading-api.fullname" . }}-secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ include "axetrading-api.fullname" . }}-secrets
           {{- end }}
 {{- end }}

@@ -4,12 +4,6 @@ variable "atomic" {
   default     = false
 }
 
-variable "create_namespace" {
-  type        = bool
-  description = "If set, Terraform will create the namespace if it does not yet exist."
-  default     = false
-}
-
 variable "name" {
   type        = string
   description = "The name of the Helm deployment."
@@ -141,68 +135,6 @@ variable "image_pull_policy" {
   default     = "IfNotPresent"
 }
 
-variable "create_service_account" {
-  type        = bool
-  description = "Whether to create a service account for Kubernetes Deployment"
-  default     = true
-}
-
-variable "service_type" {
-  type        = string
-  description = "Kubernetes ServiceTypes allow you to specify what kind of Service you want."
-  default     = "ClusterIP"
-}
-
-variable "service_port" {
-  type        = number
-  description = "Kubernetes Service Port"
-  default     = 80
-}
-
-
-variable "ingress_enabled" {
-  type        = bool
-  description = "Whether to create or skip the creation of Kubernetes Ingress for your deployment"
-  default     = false
-}
-
-variable "ingress_host" {
-  type        = string
-  description = "Kubernetes Ingress Host"
-  default     = null
-}
-
-variable "ingress_path" {
-  type        = string
-  description = "Kubernetes Ingress Path"
-  default     = "/"
-}
-
-variable "ingress_path_type" {
-  type        = string
-  description = "Each path in an Ingress is required to have a corresponding path type. Paths that do not include an explicit pathType will fail validation"
-  default     = "Prefix"
-}
-
-
-variable "replica_set" {
-  type        = number
-  description = "The number of replica set for the helm deployment"
-  default     = 1
-}
-
-variable "target_cpu_utilization" {
-  type        = number
-  description = "Target CPU utilization in percentage. "
-  default     = 80
-}
-
-variable "target_memory_utilization" {
-  type        = number
-  description = "Target Memory utilization in percentage"
-  default     = 80
-}
-
 variable "secrets" {
   type        = list(any)
   description = "A list of AWS Secret Manager Secrets that will be mounted as volumes on your containers"
@@ -226,26 +158,6 @@ variable "resources" {
   EOT
 }
 
-variable "autoscaling" {
-  type = object({
-    min_replicas              = number
-    max_replicas              = number
-    target_cpu_utilization    = optional(number, 75)
-    target_memory_utilization = optional(number, 75)
-  })
-  default     = null
-  description = <<EOT
-  "A map of autoscaling configuration, containing keys 'min_replicas', 
-  'max_replicas', 'target_cpu_utilization' and 'target_memory_utilization'.
-  EOT
-}
-
-
-variable "safe_to_evict_enabled" {
-  type        = bool
-  description = "Whether to enable the safe-to-evict annotation for the pod - this is required by Cluster Autoscaler to be able to evict pods when scaling down"
-  default     = true
-}
 
 
 variable "persistence_enabled" {
@@ -276,18 +188,6 @@ variable "persistence_mountPath" {
 variable "attach_amazoneks_efs_csi_driver_policy" {
   type        = bool
   description = "Attach a policy that allows the CSI driver’s service account to make calls to AWS APIs on your behalf"
-  default     = false
-}
-
-variable "efs_filesystem_id" {
-  type        = string
-  description = "EFS File System Id"
-  default     = ""
-}
-
-variable "create_storage_class" {
-  type        = bool
-  description = "Whether to create storage class"
   default     = false
 }
 
