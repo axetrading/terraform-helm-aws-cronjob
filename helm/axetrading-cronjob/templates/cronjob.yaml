@@ -29,7 +29,6 @@ spec:
                   readOnly: true
                {{- end }}
           restartPolicy: Never
-          serviceAccountName: {{ include "axetrading-cronjob.serviceAccountName" . }}-cron
           volumes:
           {{- if .Values.persistence.enabled }}
           - name: {{ include "axetrading-cronjob.fullname" . }}-data
