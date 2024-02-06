@@ -59,7 +59,7 @@ resource "helm_release" "main" {
     type  = "string"
   }
 
-    set {
+  set {
     name  = "image.repository"
     value = var.image_repository
     type  = "string"

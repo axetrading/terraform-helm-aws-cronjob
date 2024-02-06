@@ -54,5 +54,4 @@ efsProvisioner:
 cronJob:
   create: %{ if length(cronJobCommands) > 0 && cronJobSchedule != "" }true%{~ else }false%{~ endif }
   cronJobSchedule: ${cronJobSchedule}
-  cronJobImageTag: ${cronJobImageTag}
   cronJobCommands: []
