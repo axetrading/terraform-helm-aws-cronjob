@@ -8,7 +8,6 @@ locals {
       resources        = var.resources
       cronJobCommands  = var.cron_job_commands
       cronJobSchedule  = var.cron_job_schedule
-      cronJobImageTag  = var.cron_job_image_tag
       }
     )
   ]
@@ -54,6 +53,17 @@ resource "helm_release" "main" {
     type  = "string"
   }
 
+  set {
+    name  = "image.tag"
+    value = var.cron_job_image_tag
+    type  = "string"
+  }
+
+    set {
+    name  = "image.repository"
+    value = var.image_repository
+    type  = "string"
+  }
 
   dynamic "set" {
     for_each = var.persistence_enabled ? [var.persistence_enabled] : []
