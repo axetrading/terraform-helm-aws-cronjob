@@ -52,6 +52,5 @@ efsProvisioner:
   reclaimPolicy: retain
 
 cronJob:
-  create: %{ if length(cronJobCommands) > 0 && cronJobSchedule != "" }true%{~ else }false%{~ endif }
   cronJobSchedule: ${cronJobSchedule}
   cronJobCommands: []

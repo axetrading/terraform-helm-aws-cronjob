@@ -6,7 +6,6 @@ locals {
       awsSecrets       = var.secrets
       fullNameOverride = var.name
       resources        = var.resources
-      cronJobCommands  = var.cron_job_commands
       cronJobSchedule  = var.cron_job_schedule
       }
     )
@@ -25,7 +24,7 @@ resource "helm_release" "main" {
 
 
   set {
-    name  = "cronJob.args"
+    name  = "cronJob.cronJobCommands"
     value = "{${join(",", var.cron_job_commands)}}"
   }
 
