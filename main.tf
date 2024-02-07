@@ -2,11 +2,12 @@
 locals {
   values = [
     templatefile("${path.module}/helm/axetrading-cronjob/values.yaml.tpl", {
-      imagePullPolicy  = var.image_pull_policy
-      awsSecrets       = var.secrets
-      fullNameOverride = var.name
-      resources        = var.resources
-      cronJobSchedule  = var.cron_job_schedule
+      imagePullPolicy      = var.image_pull_policy
+      awsSecrets           = var.secrets
+      fullNameOverride     = var.name
+      resources            = var.resources
+      cronJobSchedule      = var.cron_job_schedule
+      createServiceAccount = var.create_service_account
       }
     )
   ]
@@ -69,6 +70,15 @@ resource "helm_release" "main" {
     content {
       name  = "persistence.storageClassName"
       value = var.storage_class_name
+    }
+  }
+
+  dynamic "set" {
+    for_each = var.create_role && var.create_service_account ? [aws_iam_role.this[0].arn] : [var.role_arn]
+    content {
+      name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = set.value
+      type  = "string"
     }
   }
 

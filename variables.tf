@@ -214,3 +214,10 @@ variable "cron_job_image_tag" {
   type        = string
   description = "Kubernetes Cron job image tag"
 }
+
+variable "create_service_account" {
+  type        = bool
+  description = "Whether to create a service account for Kubernetes Deployment"
+  default     = true
+}
+

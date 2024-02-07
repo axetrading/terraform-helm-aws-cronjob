@@ -4,6 +4,7 @@ metadata:
   name: {{ include "axetrading-cronjob.fullname" . }}
   labels:
     {{- include "axetrading-cronjob.labels" . | nindent 4 }}
+  namespace: '{{ .Release.Namespace }}'
 spec:
   schedule: {{ .Values.cronJob.cronJobSchedule }}
   successfulJobsHistoryLimit: 2
@@ -14,6 +15,7 @@ spec:
       backoffLimit: 0
       template:
         spec:
+          serviceAccountName: {{ include "axetrading-cronjob.serviceAccountName" . }}
           containers:
             - name: {{ include "axetrading-cronjob.fullname" . }}-cronjob
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

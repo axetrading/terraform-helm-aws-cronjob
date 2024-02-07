@@ -54,3 +54,8 @@ efsProvisioner:
 cronJob:
   cronJobSchedule: ${cronJobSchedule}
   cronJobCommands: []
+
+serviceAccount:
+  create: ${createServiceAccount}
+  annotations: {}
+  name: ""
