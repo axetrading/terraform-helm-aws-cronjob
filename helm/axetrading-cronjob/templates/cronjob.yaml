@@ -6,7 +6,7 @@ metadata:
     {{- include "axetrading-cronjob.labels" . | nindent 4 }}
   namespace: '{{ .Release.Namespace }}'
 spec:
-  schedule: {{ .Values.cronJob.cronJobSchedule }}
+  schedule: {{ .Values.cronJob.cronJobSchedule | quote }}
   successfulJobsHistoryLimit: 2
   failedJobsHistoryLimit: 2
   concurrencyPolicy: Forbid
