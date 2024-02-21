@@ -52,7 +52,7 @@ efsProvisioner:
   reclaimPolicy: retain
 
 cronJob:
-  cronJobSchedule: ${cronJobSchedule}
+  cronJobSchedule: "${cronJobSchedule}"
   cronJobCommands: []
 
 serviceAccount:
