@@ -3,7 +3,7 @@ kind: Role
 metadata:
   name: {{ include "axetrading-cronjob.fullname" . }}
   labels:
-  {{- include "axetrading-cronjob.labels" . | nindent 4 }}
+    {{- include "axetrading-cronjob.labels" . | nindent 4 }}
 rules:
 - apiGroups:
   - ""
@@ -13,3 +13,14 @@ rules:
   - read
   - list
   - get
+- apiGroups:
+  - apps
+  - extensions
+  resources:
+  - deployments
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+
