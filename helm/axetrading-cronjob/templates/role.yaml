@@ -17,10 +17,12 @@ rules:
   - apps
   resources:
   - deployments
+  - statefulsets
   verbs:
   - get
   - list
   - watch
   - patch
+  - update
   
 
