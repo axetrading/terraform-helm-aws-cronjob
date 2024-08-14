@@ -19,7 +19,7 @@ spec:
           containers:
             - name: {{ include "axetrading-cronjob.fullname" . }}-cronjob
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-              args : {{ .Values.cronJob.cronJobCommands }}
+              args: {{ .Values.cronJob.cronJobCommands | toJson }}
               volumeMounts:
                {{- if .Values.persistence.enabled }}
                 - name: {{ include "axetrading-cronjob.fullname" . }}-data
@@ -33,15 +33,15 @@ spec:
           restartPolicy: Never
           volumes:
           {{- if .Values.persistence.enabled }}
-          - name: {{ include "axetrading-cronjob.fullname" . }}-data
-            persistentVolumeClaim:
-              claimName: {{ include "axetrading-cronjob.fullname" . }}-pvc
+            - name: {{ include "axetrading-cronjob.fullname" . }}-data
+              persistentVolumeClaim:
+                claimName: {{ if .Values.cronJob.useExistingPVC }}{{ include "axetrading-cronjob.existingPVCName" . }}{{ else }}{{ include "axetrading-cronjob.fullname" . }}-pvc{{ end }}
           {{- end }}
           {{- if .Values.secretsStore.enabled }}
-          - name: {{ include "axetrading-cronjob.fullname" . }}-secrets-store
-            csi:
-              driver: secrets-store.csi.k8s.io
-              readOnly: true
-              volumeAttributes:
-                secretProviderClass: {{ include "axetrading-cronjob.fullname" . }}-secrets
+            - name: {{ include "axetrading-cronjob.fullname" . }}-secrets-store
+              csi:
+                driver: secrets-store.csi.k8s.io
+                readOnly: true
+                volumeAttributes:
+                  secretProviderClass: {{ include "axetrading-cronjob.fullname" . }}-secrets
           {{- end }}

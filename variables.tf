@@ -221,3 +221,14 @@ variable "create_service_account" {
   default     = true
 }
 
+variable "use_existing_pvc" {
+  description = "Flag to determine whether to use an existing PVC"
+  type        = bool
+  default     = false
+}
+
+variable "existing_pvc_name" {
+  description = "Name of the existing PVC to use if use_existing_pvc is true"
+  type        = string
+  default     = ""
+}

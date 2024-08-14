@@ -54,6 +54,8 @@ efsProvisioner:
 cronJob:
   cronJobSchedule: "${cronJobSchedule}"
   cronJobCommands: []
+  useExistingPVC: false
+  existingPVCName: ""
 
 serviceAccount:
   create: ${createServiceAccount}

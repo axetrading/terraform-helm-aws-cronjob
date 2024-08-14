@@ -1,4 +1,5 @@
 {{- if .Values.persistence.enabled }}
+  {{- if not .Values.cronJob.useExistingPVC }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -16,4 +17,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.storageSize }}
+  {{- end }}
 {{- end }}
