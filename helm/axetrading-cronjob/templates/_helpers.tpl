@@ -60,3 +60,11 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "axetrading-cronjob.existingPVCName" -}}
+{{ if .Values.cronJob.useExistingPVC }}
+{{ .Values.cronJob.existingPVCName }}
+{{ else }}
+{{ include "axetrading-cronjob.fullname" . }}-pvc
+{{ end }}
+{{- end }}
