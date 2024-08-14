@@ -1,4 +1,3 @@
-
 locals {
   values = [
     templatefile("${path.module}/helm/axetrading-cronjob/values.yaml.tpl", {
@@ -13,6 +12,7 @@ locals {
   ]
   deployment_values = compact(local.values)
 }
+
 resource "helm_release" "main" {
   name      = var.name
   chart     = "${path.module}/helm/axetrading-cronjob"
@@ -23,12 +23,10 @@ resource "helm_release" "main" {
 
   values = local.deployment_values
 
-
   set {
     name  = "cronJob.cronJobCommands"
     value = "{${join(",", var.cron_job_commands)}}"
   }
-
 
   set {
     name  = "persistence.enabled"
@@ -82,4 +80,17 @@ resource "helm_release" "main" {
     }
   }
 
+  set {
+    name  = "cronJob.useExistingPVC"
+    value = var.use_existing_pvc
+  }
+
+  dynamic "set" {
+    for_each = var.use_existing_pvc ? [var.existing_pvc_name] : []
+    content {
+      name  = "cronJob.existingPVCName"
+      value = set.value
+      type  = "string"
+    }
+  }
 }
